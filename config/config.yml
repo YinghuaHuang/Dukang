@@ -1,0 +1,35 @@
+model_dir: models/distill
+
+model:
+  teacher:
+    model_dir: models/distill/teacher
+    model_type: Transformer
+    teacher_checkpoint_path: pretrain_model
+  student:
+    model_dir: models/distill/student
+    model_type: Transformer
+  distill_loss_rate: 0.9
+  student_loss_rate: 0.1
+data:
+  train_features_file: data/train.src
+  train_labels_file: data/train.tgt
+  eval_features_file: data/valid.src
+  eval_labels_file: data/valid.tgt
+  source_vocabulary: data/vocab.src
+  target_vocabulary: data/vocab.tgt
+params:
+  learning_rate: 10.0
+train:
+  save_summary_steps: 10
+  save_checkpoints_steps: 5000
+  batch_size: 64
+  batch_type: examples
+  effective_batch_size: 64
+
+eval:
+  external_evaluators: BLEU
+  steps: 5000
+  save_eval_predictions: true
+  batch_size: 64
+infer:
+  batch_size: 64
